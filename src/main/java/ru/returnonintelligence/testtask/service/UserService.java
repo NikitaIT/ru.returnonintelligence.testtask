@@ -7,9 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by fan.jin on 2016-10-15.
- */
 public interface UserService {
     List<User> getAll();
     Optional<User> getByUsername(@NonNull String username);
@@ -22,5 +19,11 @@ public interface UserService {
     void updateUser(User user);
     void deleteUserById(long id);
     void deleteAllUsers();
-    public boolean isUserExist(User user);
+    boolean isUserExist(User user);
+    void reActivateUserByUsername(String username);
+    Long countAll();
+    List<User> getAllByUsernameContainingAndIsActive(String username,boolean isActive);
+    List<User> getAllByIsActive(boolean isActive);
+    Optional<User> getByEmailAndIsActive(@NonNull String email,boolean isActive);
+    List<User> getAllByBirthdayAndIsActive(@NonNull LocalDate birthday,boolean isActive);
 }

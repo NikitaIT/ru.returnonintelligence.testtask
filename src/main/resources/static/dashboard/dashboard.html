@@ -18,6 +18,13 @@
     <button type="button" class="btn btn-info" ng-click="getById()">/user/1</button>
 
 
+    <button type="button" class="btn btn-success" ng-click="getUserInfoO()">/open/whoami</button>
+    <button type="button" class="btn btn-success" ng-click="getAllUserInfoO()">/open/user/all</button>
+    <button type="button" class="btn btn-success" ng-click="getByEmailO()">/open/user?email=user@user.com</button>
+    <button type="button" class="btn btn-success" ng-click="getAllByBirthdayO()">/open/user?birthday=1997-09-20</button>
+    <button type="button" class="btn btn-success" ng-click="getByUsernameContainingO()">/open/user?username=se</button>
+
+
 </div>
 <div class="alert {{responseBoxClass}}" ng-show="serverResponse">
     <b>Server Response:</b>

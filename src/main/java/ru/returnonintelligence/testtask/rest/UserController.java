@@ -1,8 +1,5 @@
 package ru.returnonintelligence.testtask.rest;
 
-import ru.returnonintelligence.testtask.model.User;
-import ru.returnonintelligence.testtask.service.UserService;
-import ru.returnonintelligence.testtask.util.CustomErrorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +12,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.returnonintelligence.testtask.model.User;
+import ru.returnonintelligence.testtask.service.GroupService;
+import ru.returnonintelligence.testtask.service.UserService;
+import ru.returnonintelligence.testtask.util.CustomErrorType;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by fan.jin on 2016-10-15.
- */
 
 @RestController
 public class UserController {
@@ -32,18 +30,25 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private GroupService groupService;
+
+
+
 
     //-------------------Retrieve All Users--------------------------------------------------------
 
     @RequestMapping( method = RequestMethod.GET, value= "/user/all")
     public ResponseEntity<List<User>> getUsers() {
         LOGGER.debug("Received request to get all User");
-        List<User> departures = userService.getAll();
-        if (departures.isEmpty()) {
-            return new ResponseEntity(new CustomErrorType("Усё плохо"),HttpStatus.NO_CONTENT);
+        List<User> users = userService.getAll();
+        if (users.isEmpty()) {
+            return new ResponseEntity(
+                    new CustomErrorType("Bad request, NO_CONTENT"),
+                    HttpStatus.NO_CONTENT);
             // many decide to return HttpStatus.NOT_FOUND
         }
-        return new ResponseEntity<List<User>>(departures, HttpStatus.OK);
+        return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
     //http://localhost:1234/user?username=adm&birthday=2005-09-20
     @RequestMapping( method = RequestMethod.GET, value= "/user")
@@ -161,19 +166,18 @@ public class UserController {
             System.out.println("Unable to delete. User with id " + id + " not found");
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
+        if (groupService.countAdmins()<=1) {
+            final Boolean[] isAdmin = new Boolean[1];
+            user.get().getAuthorities().forEach((authority)->{
+                isAdmin[0] = authority.getAuthority().equals("ROLE_ADMIN");
+            });
+            if (isAdmin[0]) {
+                System.out.println("Unable to delete. User count <=1");
+                return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+            }
+        }
 
         userService.deleteUserById(id);
-        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
-    }
-
-
-    //------------------- Delete All Users --------------------------------------------------------
-
-    @RequestMapping(value = "/user/", method = RequestMethod.DELETE)
-    public ResponseEntity<User> deleteAllUsers() {
-        System.out.println("Deleting All Users");
-
-        userService.deleteAllUsers();
         return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
 

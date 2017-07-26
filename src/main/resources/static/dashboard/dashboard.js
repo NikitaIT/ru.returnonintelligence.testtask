@@ -94,6 +94,59 @@ function DashboardCtrl($scope, $rootScope, $http, authService, isAuthenticated) 
                 setResponse(response, false);
             });
     }
+
+    $scope.getUserInfoO = function() {
+        authService.getUser()
+            .then(function(response) {
+                setResponse(response, true);
+            })
+            .catch(function(response) {
+                setResponse(response, false);
+            });
+    }
+
+    $scope.getAllUserInfoO = function() {
+        $http.get('open/user/all')
+            .then(function(response) {
+                setResponse(response, true);
+            })
+            .catch(function(response) {
+                setResponse(response, false);
+            });
+    }
+
+    // void saveUser(User user);
+    // void updateUser(User user);
+    // void deleteUserById(long id);
+    // void deleteAllUsers();
+    // public boolean isUserExist(User user);
+    $scope.getByUsernameContainingO = function() {
+        $http.get('open/user?username=se')
+            .then(function(response) {
+                setResponse(response, true);
+            })
+            .catch(function(response) {
+                setResponse(response, false);
+            });
+    }
+    $scope.getByEmailO = function() {
+        $http.get('open/user?email=user@user.com')
+            .then(function(response) {
+                setResponse(response, true);
+            })
+            .catch(function(response) {
+                setResponse(response, false);
+            });
+    }
+    $scope.getAllByBirthdayO = function() {
+        $http.get('open/user?birthday=1997-09-20')
+            .then(function(response) {
+                setResponse(response, true);
+            })
+            .catch(function(response) {
+                setResponse(response, false);
+            });
+    }
 }
 DashboardCtrl.resolve = {
 	isAuthenticated : function($q, $http) {

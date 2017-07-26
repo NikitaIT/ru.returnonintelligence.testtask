@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
-/**
- * Created by fan.jin on 2016-10-31.
- */
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

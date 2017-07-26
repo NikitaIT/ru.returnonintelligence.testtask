@@ -22,6 +22,6 @@ public class Group {
     private Long id;
     @Column(name="name")
     private String name;
-    @ManyToMany//
+    @ManyToMany
     private Set<User> users;
 }

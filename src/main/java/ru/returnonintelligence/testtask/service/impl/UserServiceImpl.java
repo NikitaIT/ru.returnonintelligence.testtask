@@ -18,10 +18,6 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.*;
 
-/**
- * Created by fan.jin on 2016-10-15.
- */
-
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -112,6 +108,7 @@ public class UserServiceImpl implements UserService {
         return  userRepository.findAll();
     }
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void setAll(List<User> userList) {
         userRepository.save(userList);
     }
@@ -123,30 +120,76 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void saveUser(User user) {
         userRepository.save(user);
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateUser(User user) {
         saveUser(user);
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUserById(long id) {
         userRepository.delete(id);
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteAllUsers() {
         userRepository.deleteAll();
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public boolean isUserExist(User user) {
         return getByUsername(user.getUsername()).isPresent();
     }
+
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public void reActivateUserByUsername(String username) {
+        getByUsername(username).ifPresent((user)->{
+            user.setIsActive(!user.getIsActive());
+            updateUser(user);
+        });
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public Long countAll() {
+        return userRepository.count();
+    }
+
+    @Override
+    @PreAuthorize("hasRole('USER')")
+    public List<User> getAllByUsernameContainingAndIsActive(String username, boolean isActive) {
+        return userRepository.findAllByUsernameContainingAndIsActive(username, isActive);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('USER')")
+    public List<User> getAllByIsActive(boolean isActive) {
+        return userRepository.findAllByIsActive(isActive);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('USER')")
+    public Optional<User> getByEmailAndIsActive(String email, boolean isActive) {
+        return Optional.ofNullable(userRepository.findByEmailAndIsActive(email, isActive));
+    }
+
+    @Override
+    @PreAuthorize("hasRole('USER')")
+    public List<User> getAllByBirthdayAndIsActive(LocalDate birthday, boolean isActive) {
+        return userRepository.findAllByBirthdayAndIsActive(birthday,isActive);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public List<User> getByUsernameContaining(String username) {
         return userRepository.findAllByUsernameContaining(username);
     }
@@ -158,11 +201,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public Optional<User> getByEmail(@NonNull String email) {
         return  Optional.ofNullable(userRepository.findByEmail(email));
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public List<User> getAllByBirthday(@NonNull LocalDate birthday) {
         return  userRepository.findAllByBirthday(birthday);
     }
