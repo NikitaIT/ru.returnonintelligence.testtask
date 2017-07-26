@@ -9,15 +9,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.returnonintelligence.testtask.model.Address;
 import ru.returnonintelligence.testtask.model.Authority;
+import ru.returnonintelligence.testtask.model.Group;
 import ru.returnonintelligence.testtask.model.User;
 import ru.returnonintelligence.testtask.repository.UserRepository;
 import ru.returnonintelligence.testtask.service.UserService;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by fan.jin on 2016-10-15.
@@ -35,11 +34,23 @@ public class UserServiceImpl implements UserService {
         userAuthority1.setName("ROLE_USER");
         userAuthority.setName("ROLE_USER");
         adminAuthority.setName("ROLE_ADMIN");
-        List<Authority> adminAuthorities = new ArrayList<>();
-        List<Authority> userAuthorities = new ArrayList<>();
+        Set<Authority> adminAuthorities = new HashSet<>();
+        Set<Authority> userAuthorities = new HashSet<>();
         userAuthorities.add(userAuthority1);
         adminAuthorities.add(userAuthority);
         adminAuthorities.add(adminAuthority);
+
+        Group group1 = new Group();
+        group1.setName("managers");
+        Group group2 = new Group();
+        group2.setName("developers");
+        Group group3 = new Group();
+        group3.setName("testers");
+        Set<Group> groups1 = new HashSet<>();
+        groups1.add(group1);
+        groups1.add(group2);
+        Set<Group> groups2 = new HashSet<>();
+        groups2.add(group3);
         Address address = Address
                 .builder()
                 .city("Spb")
@@ -58,9 +69,10 @@ public class UserServiceImpl implements UserService {
                 .accountNonLocked(true)
                 .credentialsNonExpired(true)
                 .enabled(true)
-                .email("admin@admin.ru")
+                .email("admin@admin.com")
                 .birthday(LocalDate.parse("1997-09-20"))
                 .address(address)
+                .groups(groups2)
                 .isActive(true)
                 .authorities(adminAuthorities)
                 .build();
@@ -84,9 +96,10 @@ public class UserServiceImpl implements UserService {
                 .accountNonLocked(true)
                 .credentialsNonExpired(true)
                 .enabled(true)
-                .email("user@user.ru")
+                .email("user@user.com")
                 .birthday(LocalDate.parse("1996-09-20"))
                 .address(address1)
+                .groups(groups1)
                 .isActive(true)
                 .authorities(userAuthorities)
                 .build();

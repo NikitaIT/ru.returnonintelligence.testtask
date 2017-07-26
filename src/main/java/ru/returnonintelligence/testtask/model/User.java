@@ -12,10 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
+import java.util.Date;
+import java.util.Set;
 
 
 @Data
@@ -44,11 +44,6 @@ public class User implements UserDetails {
     private LocalDate birthday;
     @Column(name = "is_active")
     private Boolean isActive;
-
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         System.out.println("password"+new BCryptPasswordEncoder().encode(password));
         this.password = new BCryptPasswordEncoder().encode(password);
@@ -62,11 +57,11 @@ public class User implements UserDetails {
     @Column(name = "created_timestamp")
     private Date createdTimestamp;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_group",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
-    private List<Group> groups;
+    private Set<Group> groups;
     @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Address address;
@@ -74,7 +69,7 @@ public class User implements UserDetails {
     @JoinTable(name = "user_authority",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
-    private List<Authority> authorities;
+    private Set<Authority> authorities;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 //        List<GrantedAuthority> grantedAuths = new ArrayList<>();

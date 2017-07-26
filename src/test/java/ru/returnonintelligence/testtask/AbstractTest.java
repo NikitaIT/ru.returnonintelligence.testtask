@@ -1,24 +1,23 @@
 package ru.returnonintelligence.testtask;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.returnonintelligence.testtask.model.Authority;
 import ru.returnonintelligence.testtask.model.User;
 import ru.returnonintelligence.testtask.repository.UserRepository;
 import ru.returnonintelligence.testtask.security.auth.AnonAuthentication;
 import ru.returnonintelligence.testtask.security.auth.TokenBasedAuthentication;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import org.junit.After;
-import org.junit.Before;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @RunWith( SpringRunner.class )
@@ -65,7 +64,7 @@ public abstract class AbstractTest {
 		User user = new User();
 		Authority userAuthority = new Authority();
 		userAuthority.setName("ROLE_USER");
-		List<Authority> userAuthorities = new ArrayList<>();
+		Set<Authority> userAuthorities = new HashSet<>();
 		userAuthorities.add(userAuthority);
 		user.setUsername("user");
 		user.setAuthorities(userAuthorities);
@@ -78,7 +77,7 @@ public abstract class AbstractTest {
         Authority adminAuthority = new Authority();
         userAuthority.setName("ROLE_USER");
         adminAuthority.setName("ROLE_ADMIN");
-        List<Authority> adminAuthorities = new ArrayList<>();
+		Set<Authority> adminAuthorities = new HashSet<>();
         adminAuthorities.add(userAuthority);
         adminAuthorities.add(adminAuthority);
         User admin = new User();
