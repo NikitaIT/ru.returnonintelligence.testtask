@@ -190,6 +190,7 @@ DashboardCtrl.resolve = {
 		var deferred = $q.defer();
 		$http({method: 'GET', url: 'auth/refresh'})
 		.success(function(data) {
+            alert("GET auth/refresh access_token: " + data.access_token);
 			deferred.resolve(data.access_token !== null);
 		})
 		.error(function(data){

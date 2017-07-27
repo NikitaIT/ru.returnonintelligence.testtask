@@ -15,6 +15,7 @@ angular.module('myApp.login', ['ngRoute'])
   $scope.credentials = {};
   $scope.login = function() {
     // We are using formLogin in our backend, so here we need to serialize our form data
+      alert("POST auth/login " + $httpParamSerializerJQLike($scope.credentials));
     $http({
       url: 'auth/login',
       method: 'POST',
