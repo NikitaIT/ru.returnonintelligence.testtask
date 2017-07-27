@@ -1,6 +1,6 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
-
+!target/X-Users-0.0.1-SNAPSHOT.war
 ### STS ###
 .classpath
 .factorypath

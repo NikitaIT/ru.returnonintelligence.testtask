@@ -20,7 +20,7 @@ public interface UserService {
     void deleteUserById(long id);
     void deleteAllUsers();
     boolean isUserExist(User user);
-    void reActivateUserByUsername(String username);
+    void reActivateUserByUsername(String username,boolean isActive);
     Long countAll();
     List<User> getAllByUsernameContainingAndIsActive(String username,boolean isActive);
     List<User> getAllByIsActive(boolean isActive);

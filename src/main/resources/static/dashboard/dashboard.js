@@ -67,6 +67,43 @@ function DashboardCtrl($scope, $rootScope, $http, authService, isAuthenticated) 
                 setResponse(response, false);
             });
     }
+
+    $scope.getByUsernameContainingReActive = function() {
+        $http.get('user?username=se&reactive=true')
+            .then(function(response) {
+                setResponse(response, true);
+            })
+            .catch(function(response) {
+                setResponse(response, false);
+            });
+    }
+    $scope.getByUsernameContainingReActiveFalse = function() {
+        $http.get('user?username=se&reactive=false')
+            .then(function(response) {
+                setResponse(response, true);
+            })
+            .catch(function(response) {
+                setResponse(response, false);
+            });
+    }
+    $scope.getAllGroup = function() {
+        $http.get('group/all')
+            .then(function(response) {
+                setResponse(response, true);
+            })
+            .catch(function(response) {
+                setResponse(response, false);
+            });
+    }
+    $scope.getUsersByGroup = function() {
+        $http.get('group?groupname=managers')
+            .then(function(response) {
+                setResponse(response, true);
+            })
+            .catch(function(response) {
+                setResponse(response, false);
+            });
+    }
     $scope.getByEmail = function() {
         $http.get('user?email=user@user.com')
             .then(function(response) {

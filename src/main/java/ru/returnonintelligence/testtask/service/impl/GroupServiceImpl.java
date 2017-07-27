@@ -1,6 +1,7 @@
 package ru.returnonintelligence.testtask.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.returnonintelligence.testtask.model.Group;
 import ru.returnonintelligence.testtask.model.User;
@@ -20,11 +21,13 @@ public class GroupServiceImpl implements GroupService {
     @Autowired
     private GroupRepository groupRepository;
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Group> getAll() {
         return groupRepository.findAll();
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public Set<User> getUsersByGroupName(String name) {
         Group group = groupRepository.findByName(name);
         if (group!=null){

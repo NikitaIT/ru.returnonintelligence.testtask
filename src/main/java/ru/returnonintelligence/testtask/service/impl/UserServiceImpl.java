@@ -49,18 +49,18 @@ public class UserServiceImpl implements UserService {
         groups2.add(group3);
         Address address = Address
                 .builder()
-                .city("Spb")
+                .city("Winterphel")
                 .country("Russia")
-                .district("SZ")
+                .district("South")
                 .zip(12345l)
-                .street("Santiago-de-Cuba")
+                .street("wall")
                 .build();
         User admin = User
                 .builder()
                 .username("admin")
                 .password(new BCryptPasswordEncoder().encode("123"))
-                .firstname("Jon")
-                .lastname("Doe")
+                .firstname("John")
+                .lastname("Snow")
                 .accountNonExpired(true)
                 .accountNonLocked(true)
                 .credentialsNonExpired(true)
@@ -151,9 +151,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public void reActivateUserByUsername(String username) {
+    public void reActivateUserByUsername(String username,boolean isActive) {
         getByUsername(username).ifPresent((user)->{
-            user.setIsActive(!user.getIsActive());
+            user.setIsActive(isActive);
             updateUser(user);
         });
     }

@@ -13,5 +13,4 @@ public interface GroupService {
     List<Group> getAll();
     Set<User> getUsersByGroupName(String name);
     int countAdmins();
-
 }

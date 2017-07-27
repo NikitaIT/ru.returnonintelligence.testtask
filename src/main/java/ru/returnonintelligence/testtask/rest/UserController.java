@@ -55,19 +55,25 @@ public class UserController {
     public ResponseEntity<List<User>> getUsers(
             @RequestParam(name = "username", required=false) String username,
             @RequestParam(name = "birthday", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate birthday,
-            @RequestParam(name = "email", required=false) String email
+            @RequestParam(name = "email", required=false) String email,
+            @RequestParam(name = "reactive", required=false) Boolean reActive
             ) {
         if (username!=null){
-            System.out.println("Received request to get User with username"+ username);
+            LOGGER.debug("Received request to get User with username"+ username);
             List<User> users = userService.getByUsernameContaining(username);
             if (users.isEmpty()) {
                 return new ResponseEntity(new CustomErrorType(" User with username"+ username +"NOT_FOUND"),HttpStatus.NOT_FOUND);
                 // many decide to return HttpStatus.NOT_FOUND
             }
+            if (reActive!=null){
+                users.forEach((user -> {
+                    userService.reActivateUserByUsername(user.getUsername(),reActive);
+                }));
+            }
             return new ResponseEntity<List<User>>(users, HttpStatus.OK);
         }
         if (birthday!=null){
-            System.out.println("Fetching User with birthday " + birthday);
+            LOGGER.debug("Fetching User with birthday " + birthday);
             List<User> users = userService.getAllByBirthday(birthday);
             if (users.isEmpty()) {
                 return new ResponseEntity(new CustomErrorType("User with birthday "+ birthday+" NOT_FOUND"),HttpStatus.NOT_FOUND);
@@ -76,7 +82,7 @@ public class UserController {
             return new ResponseEntity<List<User>>(users, HttpStatus.OK);
         }
         if (email!=null) {
-            System.out.println("Fetching User with email " + email);
+            LOGGER.debug("Fetching User with email " + email);
             Optional<User> user = userService.getByEmail(email);
             if (!user.isPresent()) {
                 return new ResponseEntity(new CustomErrorType("User with email " + email + " NOT_FOUND"), HttpStatus.NOT_FOUND);
@@ -104,11 +110,12 @@ public class UserController {
     //-------------------Retrieve Single User--------------------------------------------------------
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> getUser(@PathVariable("id") long id) {
-        System.out.println("Fetching User with id " + id);
+    public ResponseEntity<User> getUser(
+            @PathVariable("id") long id) {
+        LOGGER.debug("Fetching User with id " + id);
         Optional<User> user = userService.getById(id);
         if (!user.isPresent()) {
-            System.out.println("User with id " + id + " not found");
+            LOGGER.debug("User with id " + id + " not found");
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<User>(user.get(), HttpStatus.OK);
@@ -120,10 +127,10 @@ public class UserController {
 
     @RequestMapping(value = "/user/", method = RequestMethod.POST)
     public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating User " + user.getUsername());
+        LOGGER.debug("Creating User " + user.getUsername());
 
         if (userService.isUserExist(user)) {
-            System.out.println("A User with name " + user.getUsername() + " already exist");
+            LOGGER.debug("A User with name " + user.getUsername() + " already exist");
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
 
@@ -139,12 +146,12 @@ public class UserController {
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
-        System.out.println("Updating User " + id);
+        LOGGER.debug("Updating User " + id);
 
         Optional<User> currentUserO = userService.getById(id);
 
         if (!currentUserO.isPresent()) {
-            System.out.println("User with id " + id + " not found");
+            LOGGER.debug("User with id " + id + " not found");
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
         User currentUser = currentUserO.get();
@@ -159,11 +166,11 @@ public class UserController {
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<User> deleteUser(@PathVariable("id") long id) {
-        System.out.println("Fetching & Deleting User with id " + id);
+        LOGGER.debug("Fetching & Deleting User with id " + id);
 
         Optional<User> user = userService.getById(id);
         if (!user.isPresent()) {
-            System.out.println("Unable to delete. User with id " + id + " not found");
+            LOGGER.debug("Unable to delete. User with id " + id + " not found");
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
         if (groupService.countAdmins()<=1) {
@@ -172,7 +179,7 @@ public class UserController {
                 isAdmin[0] = authority.getAuthority().equals("ROLE_ADMIN");
             });
             if (isAdmin[0]) {
-                System.out.println("Unable to delete. User count <=1");
+                LOGGER.debug("Unable to delete. User count <=1");
                 return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
             }
         }

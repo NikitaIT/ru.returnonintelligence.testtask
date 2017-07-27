@@ -1,4 +1,4 @@
-<h1><a href="https://github.com/bfwg/springboot-jwt-starter">Springboot JWT Starter</a></h1>
+<h1>X-Users: Springboot, JWT, AngularJS</h1>
 <div ng-show="authenticated">
 	<p>Welcome <b>{{user.firstname}} {{user.lastname}}</b></p>
 	<p>Your authority(s)
@@ -8,23 +8,34 @@
 <div  ng-show="!authenticated">
 	<p>You are an anonymous user.</p>
 </div>
-<p>Click the links below and see the result.</p>
+<p>Click the links below and see the result.<br>
+    auth : "/auth" + _/refresh  _/login _/logout<br>
+    Create a User : "/user/", POST, sand user<br>
+    Update a User : "/user/{id}", PUT, sand user<br>
+    Delete a User : "/user/{id}", DELETE
+</p>
 <div style="margin-bottom: 10px;">
-    <button type="button" class="btn btn-info" ng-click="getUserInfo()">/whoami</button>
-    <button type="button" class="btn btn-info" ng-click="getAllUserInfo()">/user/all</button>
-    <button type="button" class="btn btn-info" ng-click="getByEmail()">/user?email=user@user.com</button>
-    <button type="button" class="btn btn-info" ng-click="getAllByBirthday()">/user?birthday=1997-09-20</button>
-    <button type="button" class="btn btn-info" ng-click="getByUsernameContaining()">/user?username=se</button>
-    <button type="button" class="btn btn-info" ng-click="getById()">/user/1</button>
-
-
-    <button type="button" class="btn btn-success" ng-click="getUserInfoO()">/open/whoami</button>
-    <button type="button" class="btn btn-success" ng-click="getAllUserInfoO()">/open/user/all</button>
-    <button type="button" class="btn btn-success" ng-click="getByEmailO()">/open/user?email=user@user.com</button>
-    <button type="button" class="btn btn-success" ng-click="getAllByBirthdayO()">/open/user?birthday=1997-09-20</button>
-    <button type="button" class="btn btn-success" ng-click="getByUsernameContainingO()">/open/user?username=se</button>
-
-
+    <div class="container">
+        <p>Admin REST API, If you deactivate the user, it is not available in the /open/</p>
+        <button type="button" class="btn btn-info" ng-click="getUserInfo()">/whoami</button>
+        <button type="button" class="btn btn-info" ng-click="getAllUserInfo()">/user/all</button>
+        <button type="button" class="btn btn-info" ng-click="getByEmail()">/user?email=user@user.com</button>
+        <button type="button" class="btn btn-info" ng-click="getAllByBirthday()">/user?birthday=1997-09-20</button>
+        <button type="button" class="btn btn-info" ng-click="getByUsernameContaining()">/user?username=se</button>
+        <button type="button" class="btn btn-info" ng-click="getById()">/user/1</button>
+        <button type="button" class="btn btn-info" ng-click="getByUsernameContainingReActive()">/user?username=se&reactive=true</button>
+        <button type="button" class="btn btn-info" ng-click="getByUsernameContainingReActiveFalse()">/user?username=se&reactive=false</button>
+        <button type="button" class="btn btn-info" ng-click="getAllGroup()">group/all</button>
+        <button type="button" class="btn btn-info" ng-click="getUsersByGroup()">(TODO:need_mapped)group?groupname=managers</button>
+    </div>
+    <div class="container">
+        <p>User REST API, Provides a brief information about users</p>
+        <button type="button" class="btn btn-success" ng-click="getUserInfoO()">/open/whoami</button>
+        <button type="button" class="btn btn-success" ng-click="getAllUserInfoO()">/open/user/all</button>
+        <button type="button" class="btn btn-success" ng-click="getByEmailO()">/open/user?email=user@user.com</button>
+        <button type="button" class="btn btn-success" ng-click="getAllByBirthdayO()">/open/user?birthday=1997-09-20</button>
+        <button type="button" class="btn btn-success" ng-click="getByUsernameContainingO()">/open/user?username=se</button>
+    </div>
 </div>
 <div class="alert {{responseBoxClass}}" ng-show="serverResponse">
     <b>Server Response:</b>

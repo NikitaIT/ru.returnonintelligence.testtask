@@ -1,5 +1,5 @@
 app:
-  name: springboot-jwt-demo
+  name: x-users
   user_cookie: c_user
 server:
   port: 1234

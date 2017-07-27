@@ -72,7 +72,7 @@ public class OpenUserController {
     ) {
         List<UserDTO> userDTOList = new ArrayList<>();
         if (username!=null){
-            System.out.println("Received request to get User with username"+ username);
+            LOGGER.debug("Received request to get User with username"+ username);
             List<User> users = userService.getAllByUsernameContainingAndIsActive(username,true);
             if (users.isEmpty()) {
                 return new ResponseEntity(new CustomErrorType(" User with username"+ username +"NOT_FOUND"),HttpStatus.NOT_FOUND);
@@ -91,7 +91,7 @@ public class OpenUserController {
             return new ResponseEntity<List<UserDTO>>(userDTOList, HttpStatus.OK);
         }
         if (birthday!=null){
-            System.out.println("Fetching User with birthday " + birthday);
+            LOGGER.debug("Fetching User with birthday " + birthday);
             List<User> users = userService.getAllByBirthdayAndIsActive(birthday,true);
             if (users.isEmpty()) {
                 return new ResponseEntity(new CustomErrorType("User with birthday "+ birthday+" NOT_FOUND"),HttpStatus.NOT_FOUND);
@@ -110,7 +110,7 @@ public class OpenUserController {
             return new ResponseEntity<List<UserDTO>>(userDTOList, HttpStatus.OK);
         }
         if (email!=null) {
-            System.out.println("Fetching User with email " + email);
+            LOGGER.debug("Fetching User with email " + email);
             Optional<User> user = userService.getByEmailAndIsActive(email,true);
             if (!user.isPresent()) {
                 return new ResponseEntity(new CustomErrorType("User with email " + email + " NOT_FOUND"), HttpStatus.NOT_FOUND);
